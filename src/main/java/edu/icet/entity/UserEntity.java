@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
@@ -14,6 +15,7 @@ public class UserEntity {
     private Long id;
     @Column(unique = true)
     private String username;
+    private String email;
     private String password;
     private String role; // STUDENT, COMPANY, ADMIN
 }

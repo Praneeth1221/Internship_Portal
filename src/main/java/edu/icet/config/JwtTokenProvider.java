@@ -13,7 +13,6 @@ public class JwtTokenProvider {
     @Value("${jwt.expirationMs}")
     private int jwtExpirationMs;
 
-    // Generate JWT
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
         Date now = new Date();
@@ -27,24 +26,17 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // Get username from JWT
     public String getUsernameFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
-    // Validate JWT
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException | UnsupportedJwtException |
-                 MalformedJwtException | SignatureException | IllegalArgumentException ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
 }

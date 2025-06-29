@@ -1,36 +1,30 @@
 package edu.icet.controller;
 
-import edu.icet.dto.auth.RegisterRequestDto;
-import edu.icet.security.JwtUtil;
-import edu.icet.service.UserService;
+
+import edu.icet.dto.auth.UserLoginRequestDto;
+import edu.icet.dto.auth.UserRegisterRequestDto;
+import edu.icet.dto.auth.UserResponseDto;
+import edu.icet.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
+    private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequestDto request) {
-        userService.registerUser(request);
-        return ResponseEntity.ok("User registered successfully");
+    public ResponseEntity<UserResponseDto> register(@RequestBody UserRegisterRequestDto request) {
+        UserResponseDto response = authService.register(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
-        String token = jwtUtil.generateToken(request.getUsername());
-        return ResponseEntity.ok(new JwtResponse(token));
+    public ResponseEntity<String> login(@RequestBody UserLoginRequestDto request) {
+        String token = authService.login(request);
+        return ResponseEntity.ok(token);
     }
 }
