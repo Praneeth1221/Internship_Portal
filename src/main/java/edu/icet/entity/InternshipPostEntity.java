@@ -16,7 +16,5 @@ public class InternshipPostEntity {
     private String description;
     private String location;
     private String duration;
-
-    @ManyToOne
-    private UserEntity createdBy;
+    private String createdBy;
 }

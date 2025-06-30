@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
+
 public interface ApplicationRepository extends JpaRepository<ApplicationEntity, Long> {
-    List<ApplicationEntity> findByStudent(UserEntity student);
+    List<ApplicationEntity> findByStudentId(Long studentId);
+    List<ApplicationEntity> findByPostId(Long postId);
 }
